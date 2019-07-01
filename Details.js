@@ -1,19 +1,53 @@
 import React, { Component } from 'react';
-import { AppRegistry, View, StyleSheet, Text, Image} from 'react-native';
-import rows from './Rows'
+import { ActivityIndicator, View, StyleSheet, Text, Image} from 'react-native';
+import { connect } from 'react-redux'
+import { actionCreators } from './ListRedux'
 
-class Details extends Component {
-  render() {
+const mapStateToProps = (state) => ({
+  loading: state.details.loading,
+  error: state.details.error,
+  details: state.details.data, 
+})
+    
+//    item = rows.find( function(element) {return (itemId == element.id)} )
+
+export class Details extends Component {
+
+  componentWillMount() {
+    const {dispatch} = this.props
     const { navigation } = this.props;
     const itemId = navigation.getParam('itemId');
-    item = rows.find( function(element) {return (itemId == element.id)} )
+
+    dispatch(actionCreators.fetchDetails(itemId))
+  }
+
+  render() {
+    const {details, loading, error} = this.props
+
+    if (loading) {
+      return (
+        <View style={styles.center}>
+          <ActivityIndicator animating={true} />
+        </View>
+      )
+    }
+
+    if (error) {
+      return (
+        <View style={styles.center}>
+          <Text>
+            Failed to load Details!
+          </Text>
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
             <Image
                 style={styles.image}
-                source={{uri: item.image}}
+                source={{uri: details.image}}
             />
-            <Text> {item.moretext}</Text>
+            <Text> {details.moretext}</Text>
       </View>
     )
   }
@@ -25,6 +59,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     width: 50,
     height: 50,
@@ -32,4 +71,4 @@ const styles = StyleSheet.create({
 
   })
 
-export default Details;
+export default connect(mapStateToProps)(Details)

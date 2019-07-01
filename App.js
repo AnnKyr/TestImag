@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import List from './List'
-import Details from './Details'
+import ListWindow from './ListWindow'
+import DetailsWindow from './DetailsWindow'
 
 //export default 
 class HomeScreen extends Component {
@@ -12,7 +12,7 @@ class HomeScreen extends Component {
         <Text>Home Screen</Text>
           <Button
             title="Go to Details"
-            onPress={() => this.props.navigation.navigate('List')}
+            onPress={() => this.props.navigation.navigate('ListWindow')}
           />
       </View>
     );
@@ -23,8 +23,8 @@ class HomeScreen extends Component {
 const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
-    List: List,
-    Details: Details,
+    ListWindow: ListWindow,
+    DetailsWindow: DetailsWindow,
   },
   {
     initialRouteName: "Home"
